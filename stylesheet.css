@@ -1,3 +1,15 @@
 body {
   background-color: aqua;
 }
+
+/* game board */
+
+#game-board {
+  display: flex;
+}
+.game-square {
+  width: 200px;
+  height: 200px;
+  background-color: saddlebrown;
+  border: 5px solid white;
+}
