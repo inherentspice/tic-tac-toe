@@ -23,7 +23,7 @@ const gameBoard = (() => {
       return part.id === id;
     });
     console.log(boardIndex);
-    if (gameBoardHolder[boardIndex].value !== "x" || gameBoardHolder[boardIndex].value !== "o") {
+    if (gameBoardHolder[boardIndex].value !== "x" && gameBoardHolder[boardIndex].value !== "o") {
       gameBoardHolder[boardIndex].value = playerValue;
     }
   };
@@ -38,11 +38,6 @@ const gameBoard = (() => {
 const endGame = () => {
   // checks if there are three tiles horizontally, vertically, or diagonally
   console.log("ending game...");
-};
-
-const addPiece = () => {
-  // updates ownership of tiles in gameBoard object
-  console.log("adding piece...");
 };
 
 const Players = (input) => {
@@ -102,16 +97,21 @@ const gameFlow = (() => {
     });
   }
 
+  function addPiece(id) {
+    gb.modifyBoardPart(
+      id,
+      playerOne.isTurn
+        ? playerOne.symbol : playerTwo.symbol,
+    );
+    playerOne.isTurn = !playerOne.isTurn;
+    playerTwo.isTurn = !playerTwo.isTurn;
+  }
+
   // game bindevents
   function gameBindEvents() {
     document.body.addEventListener("click", (event) => {
       if (event.target.className === "game-square") {
-        gb.modifyBoardPart(
-          Number(event.target.id),
-          playerOne.isTurn
-            ? playerOne.symbol : playerTwo.symbol,
-        );
-        // change player turn
+        addPiece(Number(event.target.id));
         render();
       }
     });
