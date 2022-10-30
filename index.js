@@ -3,15 +3,17 @@ const gameBoard = (() => {
   // give pieces an owner that way we track the winner
   const gameBoardHolder = [];
 
-  const createBoardPart = (id, value) => ({
+  const createBoardPart = (id, value, coordinate) => ({
     id,
     value,
+    coordinate,
   });
 
   const initializeGameBoard = () => {
     let counter = 0;
     while (gameBoardHolder.length < 9) {
-      gameBoardHolder.push(createBoardPart(counter, " "));
+      const coordinate = [Math.floor(counter / 3), counter % 3];
+      gameBoardHolder.push(createBoardPart(counter, " ", coordinate));
       counter += 1;
     }
   };
@@ -90,7 +92,7 @@ const gameFlow = (() => {
   }
 
   function checkEndGame() {
-    console.log(gb.gameBoardHolder.slice(0, 3));
+    console.log(gb.gameBoardHolder);
   }
   function addPiece(id) {
     gb.modifyBoardPart(
