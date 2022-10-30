@@ -30,12 +30,9 @@ const gameBoard = (() => {
   };
 })();
 
-const endGame = () => {
-  // checks if there are three tiles horizontally, vertically, or diagonally
-  console.log("ending game...");
-};
+const endGame = () => 0;
 
-const Players = (input) => {
+const players = (input) => {
   // players need--name, symbol, and turn
   const name = input.value;
   const symbol = input.id === "player-two" ? "x" : "o";
@@ -106,12 +103,19 @@ const gameFlow = (() => {
     checkEndGame();
   }
 
+  function computerMove() {
+    const newMove = gb.gameBoardHolder.filter((square) => square.value === " ");
+    addPiece(newMove[0].id);
+    render();
+  }
+
   // game bindevents
   function gameBindEvents() {
     document.body.addEventListener("click", (event) => {
       if (event.target.className === "game-square") {
         addPiece(Number(event.target.id));
         render();
+        setTimeout(() => { computerMove(); }, 1000);
       }
     });
   }
@@ -119,8 +123,8 @@ const gameFlow = (() => {
   // login bindEvents
   cached.startGameButton.addEventListener("click", (e) => {
     e.preventDefault();
-    playerOne = Players(cached.playerOneInput);
-    playerTwo = Players(cached.playerTwoInput);
+    playerOne = players(cached.playerOneInput);
+    playerTwo = players(cached.playerTwoInput);
     gb.initializeGameBoard();
     gameBindEvents();
     render();
