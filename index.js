@@ -17,12 +17,7 @@ const gameBoard = (() => {
   };
 
   const modifyBoardPart = (id, playerValue) => {
-    const boardIndex = gameBoardHolder.findIndex((part) => {
-      console.log(part.id);
-      console.log(id);
-      return part.id === id;
-    });
-    console.log(boardIndex);
+    const boardIndex = gameBoardHolder.findIndex((part) => part.id === id);
     if (gameBoardHolder[boardIndex].value !== "x" && gameBoardHolder[boardIndex].value !== "o") {
       gameBoardHolder[boardIndex].value = playerValue;
     }
@@ -97,6 +92,9 @@ const gameFlow = (() => {
     });
   }
 
+  function checkEndGame() {
+    console.log(gb.gameBoardHolder.slice(0, 3));
+  }
   function addPiece(id) {
     gb.modifyBoardPart(
       id,
@@ -105,6 +103,7 @@ const gameFlow = (() => {
     );
     playerOne.isTurn = !playerOne.isTurn;
     playerTwo.isTurn = !playerTwo.isTurn;
+    checkEndGame();
   }
 
   // game bindevents

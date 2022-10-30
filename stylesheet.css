@@ -1,15 +1,31 @@
 body {
   background-color: aqua;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 3rem;
 }
 
 /* game board */
 
 #game-board {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 200px);
+  grid-template-rows: repeat(3, 200px);
+
 }
 .game-square {
   width: 200px;
   height: 200px;
-  background-color: saddlebrown;
-  border: 5px solid white;
+  background-color: white;
+  border: 5px solid greenyellow;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-symbol {
+  font-size: max(100px, 50%);
+  color: rgb(111, 177, 13);
 }
