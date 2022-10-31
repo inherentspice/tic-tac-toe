@@ -25,16 +25,21 @@ const gameBoard = (() => {
     }
   };
 
+  const resetBoard = () => {
+    let counter = gameBoardHolder.length - 1;
+    while (counter >= 0) {
+      gameBoardHolder[counter].value = " ";
+      counter -= 1;
+    }
+  };
+
   return {
     gameBoardHolder,
     modifyBoardPart,
     initializeGameBoard,
+    resetBoard,
   };
 })();
-
-const endGame = () => {
-  console.log("...ending");
-};
 
 const players = (input) => {
   // players need--name, symbol, and turn
@@ -70,14 +75,16 @@ const gameFlow = (() => {
   const cached = domCache();
   const gb = gameBoard;
 
+  function resetBoard() {
+    while (cached.gameBoardDisplay.firstChild) {
+      cached.gameBoardDisplay.removeChild(cached.gameBoardDisplay.firstChild);
+    }
+  }
+
   function render() {
     // first clear the existing entries so that this function doesn't duplicate entries
 
-    (function resetBoard() {
-      while (cached.gameBoardDisplay.firstChild) {
-        cached.gameBoardDisplay.removeChild(cached.gameBoardDisplay.firstChild);
-      }
-    }());
+    resetBoard();
 
     gb.gameBoardHolder.map((square) => {
       const newDiv = document.createElement("div");
@@ -93,6 +100,11 @@ const gameFlow = (() => {
     });
   }
 
+  function endGame() {
+    gb.resetBoard();
+    render();
+  }
+
   function checkEndGame() {
     const symbolCheck = playerOne.isTurn
       ? playerOne.symbol : playerTwo.symbol;
@@ -106,8 +118,10 @@ const gameFlow = (() => {
         endGame();
         return 0;
       }
+      return square;
     });
   }
+
   function addPiece(id) {
     gb.modifyBoardPart(
       id,
@@ -125,7 +139,6 @@ const gameFlow = (() => {
     render();
   }
 
-  // game bindevents
   function gameBindEvents() {
     document.body.addEventListener("click", (event) => {
       if (event.target.className === "game-square") {
@@ -146,6 +159,4 @@ const gameFlow = (() => {
     gameBindEvents();
     render();
   });
-
-  endGame();
 })();
