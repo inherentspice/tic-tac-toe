@@ -32,7 +32,9 @@ const gameBoard = (() => {
   };
 })();
 
-const endGame = () => 0;
+const endGame = () => {
+  console.log("...ending");
+};
 
 const players = (input) => {
   // players need--name, symbol, and turn
@@ -92,7 +94,19 @@ const gameFlow = (() => {
   }
 
   function checkEndGame() {
-    console.log(gb.gameBoardHolder);
+    const symbolCheck = playerOne.isTurn
+      ? playerOne.symbol : playerTwo.symbol;
+    const filteredGameBoard = gb.gameBoardHolder.filter((square) => square.value === symbolCheck);
+    filteredGameBoard.forEach((square) => {
+      const horizontal = filteredGameBoard.filter((secondSquare) => secondSquare.coordinate[0]
+        === square.coordinate[0]);
+      const vertical = filteredGameBoard.filter((secondSquare) => secondSquare.coordinate[1]
+        === square.coordinate[1]);
+      if (horizontal.length === 3 || vertical.length === 3) {
+        endGame();
+        return 0;
+      }
+    });
   }
   function addPiece(id) {
     gb.modifyBoardPart(
@@ -115,7 +129,8 @@ const gameFlow = (() => {
   function gameBindEvents() {
     document.body.addEventListener("click", (event) => {
       if (event.target.className === "game-square") {
-        addPiece(Number(event.target.id));
+        const id = Number(event.target.id);
+        addPiece(id);
         render();
         setTimeout(() => { computerMove(); }, 1000);
       }
