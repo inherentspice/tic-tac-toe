@@ -106,9 +106,9 @@ const gameFlow = (() => {
   }
 
   function checkEndGame() {
-    const symbolCheck = playerOne.isTurn
+    const symbCheck = playerOne.isTurn
       ? playerOne.symbol : playerTwo.symbol;
-    const filteredGameBoard = gb.gameBoardHolder.filter((square) => square.value === symbolCheck);
+    const filteredGameBoard = gb.gameBoardHolder.filter((square) => square.value === symbCheck);
     filteredGameBoard.forEach((square) => {
       const horizontal = filteredGameBoard.filter((secondSquare) => secondSquare.coordinate[0]
         === square.coordinate[0]);
@@ -116,7 +116,25 @@ const gameFlow = (() => {
         === square.coordinate[1]);
       if (horizontal.length === 3 || vertical.length === 3) {
         endGame();
-        return 0;
+        return 1;
+      }
+      if (square.coordinate[0] === 1 && square.coordinate[1] === 1 && square.value === symbCheck) {
+        const topLeft = filteredGameBoard.find((squareDiagonal) => squareDiagonal.coordinate[0]
+          === 0 && squareDiagonal.coordinate[1]
+          === 0);
+        const bottomRight = filteredGameBoard.find((squareDiagonal) => squareDiagonal.coordinate[0]
+          === 2 && squareDiagonal.coordinate[1]
+          === 2);
+        const topRight = filteredGameBoard.find((squareDiagonal) => squareDiagonal.coordinate[0]
+          === 0 && squareDiagonal.coordinate[1]
+          === 2);
+        const bottomLeft = filteredGameBoard.find((squareDiagonal) => squareDiagonal.coordinate[0]
+          === 2 && squareDiagonal.coordinate[1]
+          === 0);
+        if ((topLeft && bottomRight) || (topRight && bottomLeft)) {
+          endGame();
+          return 1;
+        }
       }
       return square;
     });
@@ -159,4 +177,6 @@ const gameFlow = (() => {
     gameBindEvents();
     render();
   });
-})();
+});
+
+gameFlow();
