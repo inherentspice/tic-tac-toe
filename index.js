@@ -46,11 +46,13 @@ const players = (input) => {
   const name = input.value;
   const symbol = input.id === "player-two" ? "x" : "o";
   const isTurn = false;
+  const wins = 0;
 
   return {
     name,
     symbol,
     isTurn,
+    wins,
   };
 };
 
@@ -81,6 +83,9 @@ const gameFlow = (() => {
     while (cached.gameBoardDisplay.firstChild) {
       cached.gameBoardDisplay.removeChild(cached.gameBoardDisplay.firstChild);
     }
+    while (cached.messageDisplay.firstChild) {
+      cached.messageDisplay.removeChild(cached.messageDisplay.firstChild);
+    }
   }
 
   function render() {
@@ -100,18 +105,25 @@ const gameFlow = (() => {
 
       return square;
     });
-
-    // const playerOneResults = document.createElement("p");
-    // const playerTwoResults = document.createElement("p");
-    // playerOneResults.textContent(`Player one has ${playerOne.wins} wins`);
-    // playerTwoResults.textContent(`Player two has ${playerTwo.wins} wins`);
-    // cached.messageDisplay.appendChild(playerOneResults);
-    // cached.messageDisplay.appendChild(playerTwoResults);
+    const newDiv = document.createElement("div");
+    const playerOneResults = document.createElement("p");
+    const playerTwoResults = document.createElement("p");
+    playerOneResults.className = "results";
+    playerOneResults.textContent = (`${playerOne.name} has ${playerOne.wins} wins`);
+    playerTwoResults.textContent = (`${playerTwo.name || "computer"} has ${playerTwo.wins} wins`);
+    newDiv.appendChild(playerOneResults);
+    newDiv.appendChild(playerTwoResults);
+    cached.messageDisplay.appendChild(newDiv);
   }
 
   function createWinWindow() {
     const playerCheck = playerOne.isTurn
       ? playerOne.name : playerOne.name;
+    if (playerOne.isTurn) {
+      playerOne.wins += 1;
+    } else {
+      playerTwo.wins += 1;
+    }
     alert(`${playerCheck} won this round.`);
   }
 
