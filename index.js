@@ -152,8 +152,9 @@ const gameFlow = (() => {
   }
 
   function computerMove() {
-    const newMove = gb.gameBoardHolder.filter((square) => square.value === " ");
-    addPiece(newMove[0].id);
+    const freeSpaces = gb.gameBoardHolder.filter((square) => square.value === " ");
+    const newMove = Math.floor(Math.random(0, freeSpaces.length - 1) * (freeSpaces.length - 1));
+    addPiece(freeSpaces[newMove].id);
     render();
   }
 
