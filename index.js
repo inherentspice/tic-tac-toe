@@ -43,9 +43,9 @@ const gameBoard = (() => {
 
 const players = (input) => {
   // players need--name, symbol, and turn
-  const name = input.value;
-  const symbol = input.id === "player-two" ? "x" : "o";
-  const isTurn = false;
+  const name = input.value || "computer";
+  const symbol = input.id === "player-two" ? "o" : "x";
+  const isTurn = input.id !== "player-two";
   const wins = 0;
 
   return {
@@ -114,17 +114,18 @@ const gameFlow = (() => {
     newDiv.appendChild(playerOneResults);
     newDiv.appendChild(playerTwoResults);
     cached.messageDisplay.appendChild(newDiv);
+    cached.messageDisplay.className = "game-message";
   }
 
   function createWinWindow() {
     const playerCheck = playerOne.isTurn
-      ? playerOne.name : playerOne.name;
+      ? playerOne.name : playerTwo.name;
     if (playerOne.isTurn) {
       playerOne.wins += 1;
     } else {
       playerTwo.wins += 1;
     }
-    alert(`${playerCheck} won this round.`);
+    alert(`${playerCheck || "computer"} won this round.`);
   }
 
   function endGame() {
@@ -136,6 +137,7 @@ const gameFlow = (() => {
   function checkEndGame() {
     const symbCheck = playerOne.isTurn
       ? playerOne.symbol : playerTwo.symbol;
+    const tieCheck = gb.gameBoardHolder.filter((square) => square.value === " ");
     const filteredGameBoard = gb.gameBoardHolder.filter((square) => square.value === symbCheck);
     let checkResult = false;
     filteredGameBoard.forEach((square) => {
@@ -165,9 +167,10 @@ const gameFlow = (() => {
       }
       return 1;
     });
-    console.log(checkResult);
     if (checkResult) {
       endGame();
+    } else if (!tieCheck.length) {
+      gb.resetBoard();
     }
   }
 

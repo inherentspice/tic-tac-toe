@@ -29,3 +29,14 @@ body {
   font-size: max(100px, 50%);
   color: rgb(111, 177, 13);
 }
+
+.game-message {
+  background-color: white;
+  border: 3px solid greenyellow;
+  width: 30%;
+  display: flex;
+  justify-content: start;
+  font-size: 18px;
+  font-weight: 700;
+  padding: 1rem;
+}
