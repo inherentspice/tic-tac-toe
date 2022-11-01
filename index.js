@@ -59,12 +59,14 @@ const domCache = () => {
   const gameBoardDisplay = document.getElementById("game-board");
   const playerOneInput = document.getElementById("player-one");
   const playerTwoInput = document.getElementById("player-two");
+  const messageDisplay = document.getElementById("game-message");
 
   return {
     startGameButton,
     gameBoardDisplay,
     playerOneInput,
     playerTwoInput,
+    messageDisplay,
   };
 };
 
@@ -98,25 +100,39 @@ const gameFlow = (() => {
 
       return square;
     });
+
+    // const playerOneResults = document.createElement("p");
+    // const playerTwoResults = document.createElement("p");
+    // playerOneResults.textContent(`Player one has ${playerOne.wins} wins`);
+    // playerTwoResults.textContent(`Player two has ${playerTwo.wins} wins`);
+    // cached.messageDisplay.appendChild(playerOneResults);
+    // cached.messageDisplay.appendChild(playerTwoResults);
+  }
+
+  function createWinWindow() {
+    const playerCheck = playerOne.isTurn
+      ? playerOne.name : playerOne.name;
+    alert(`${playerCheck} won this round.`);
   }
 
   function endGame() {
     gb.resetBoard();
     render();
+    createWinWindow();
   }
 
   function checkEndGame() {
     const symbCheck = playerOne.isTurn
       ? playerOne.symbol : playerTwo.symbol;
     const filteredGameBoard = gb.gameBoardHolder.filter((square) => square.value === symbCheck);
+    let checkResult = false;
     filteredGameBoard.forEach((square) => {
       const horizontal = filteredGameBoard.filter((secondSquare) => secondSquare.coordinate[0]
         === square.coordinate[0]);
       const vertical = filteredGameBoard.filter((secondSquare) => secondSquare.coordinate[1]
         === square.coordinate[1]);
       if (horizontal.length === 3 || vertical.length === 3) {
-        endGame();
-        return 1;
+        checkResult = true;
       }
       if (square.coordinate[0] === 1 && square.coordinate[1] === 1 && square.value === symbCheck) {
         const topLeft = filteredGameBoard.find((squareDiagonal) => squareDiagonal.coordinate[0]
@@ -132,12 +148,15 @@ const gameFlow = (() => {
           === 2 && squareDiagonal.coordinate[1]
           === 0);
         if ((topLeft && bottomRight) || (topRight && bottomLeft)) {
-          endGame();
-          return 1;
+          checkResult = true;
         }
       }
-      return square;
+      return 1;
     });
+    console.log(checkResult);
+    if (checkResult) {
+      endGame();
+    }
   }
 
   function addPiece(id) {
